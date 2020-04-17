@@ -1,0 +1,41 @@
+To Launch Jenkins:
+
+docker run -d -u root  -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):$(which docker) -p 50000:50000 -p 8080:8080  jenkins/jenkins:latest
+
+To Launch Ansible-Playbook from Jenkins :
+
+docker run --rm -t -v /Users/pradga/netdevops:/playbooks juniper/pyez-ansible ansible-playbook -i hosts pb_collect_facts.yml
+
+
+Build Console Notes :
+
+Started by user Pradeep Gadde
+Running as SYSTEM
+Building in workspace /var/jenkins_home/workspace/JAUT
+using credential github-creds
+ > git rev-parse --is-inside-work-tree # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/pradeepgadde/netdevops # timeout=10
+Fetching upstream changes from https://github.com/pradeepgadde/netdevops
+ > git --version # timeout=10
+using GIT_ASKPASS to set credentials 
+ > git fetch --tags --progress -- https://github.com/pradeepgadde/netdevops +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+ > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
+Checking out Revision d8357d5c7f068a0a2e9e39abf04aaef177f0d471 (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f d8357d5c7f068a0a2e9e39abf04aaef177f0d471 # timeout=10
+Commit message: "Added a shell script to run ansible playbook from Jenkins"
+ > git rev-list --no-walk d8357d5c7f068a0a2e9e39abf04aaef177f0d471 # timeout=10
+[JAUT] $ /bin/sh -xe /tmp/jenkins2313863552347180642.sh
++ docker run --rm -t -v /Users/pradga/netdevops:/playbooks juniper/pyez-ansible ansible-playbook -i hosts pb_collect_facts.yml
+RNING]: Invalid characters were found in group names but not replaced, usee detailesY [Get Facts] ***************************************************************
+
+TASK [Retrieve information from devices running Junos] *************************
+K [g": "device vsrx1 is a vSRX running junos version 19.1R1-S2.2P"rint some facts] ********************************************************
+
+nanged=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+Finished: SUCCESS
+pendices/interpreter_discovery.html for more information.fig` v2.11 onwardsRNING]: Platform linux on host vsrx3 is using the discovered Pytho t /usr/bin/python, but future installation of another Pytange this. See https://docs.ansible.com/ansible/2.9/referenoY RECAP *********************************************************************
+rx3
