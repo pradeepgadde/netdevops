@@ -1,0 +1,166 @@
+---
+
+# Ansible Certification: Red Hat EX407 
+- Oreilly Course by Sander van Vugt 
+
+- tasks :
+    - name: Ansible Fundamentals  # Space after - is mandatory !
+   
+    - name: Lession 1 Taking an Ansible Test-drive
+        - ansible.cfg
+        - inventory 
+        - anisble modules location (in macOS) : /usr/local/lib/python3.7/site-packages/ansible/modules/
+        - ansible localhost -m ping
+        - ansible localhost -a "whoami"
+        - anisble all -a "id"
+        - ansible localhost -m command -a "id"
+        - ansible localhost -m command -a "date"
+        - ansible localhost -m shell -a "date"
+        - privilege escalation : become become_user become_method
+       
+
+    - name: Lession 2 Understanding Ansible Architecture
+      notes:
+        - ansible-doc -l
+        - ansible-doc -s ping
+        - ansible-doc -s slack
+        - ansible-doc -s copy
+        - ansible-doc -s template
+        - ansible-doc -s command
+        - ansible-doc -s yum
+        - ansible-doc -s file
+        - ansible-doc -s junos_facts
+
+   
+    - name: Lession 3 Working with Playbooks
+        - ansible-playbook --syntax-check pb_collect_facts.yml 
+        - ansible-playbook pb_collect_facts.yml --list-hosts
+        - ansible-playbook -C pb_collect_facts.yml # for Dry-Run
+        - ansible-playbook --step pb_collect_facts.yml
+        - lineinfile module # to modify an existing line in a file
+        - firewalld module 
+
+
+    - name: Lession 4 Working wiht Variables,Inclusions and Task Control, Facts
+        - Highest level scope wins  Global, Play, Host
+        - Global: command line or ansible.cfg file
+        - Host: individula hosts or groups via inventory file
+        - Playbook:
+          - hosts: all
+            vars: # keyword to define variables
+              user: pradeep
+              home: /home/pradeep
+        - Variable files:
+          - hosts: all
+            vars_files: # keyword to specify exterbal variable files 
+              - vars/users.yml
+            
+              # cat var/users.yml
+              # user: pradeep
+              # home: /home/pradeep
+              # user: suma
+              # home: /home/suma
+        - Using variables 
+        - tasks:
+            - name : Creates the user {{ user }} 
+              user:
+                name: "{{ user }}" # if the variable is used as the first element , double quotes mandatory !
+
+        - Importance of Project Directory wiht various files 
+        - Host variables and Group variables
+        # These may be defined in the inventory file, but that is deprecated
+        # Recommended method to use group_vars and host_vars directories ...
+
+        # [webservers]
+        # server1.example.com
+
+        # [webservers:vars] ## To define variables inside inventory file 
+        # user=pradeep
+
+
+        # Within the Project Directory , which contains the inventoru file create directories group_vars and host_vars
+
+        # If we have a host group "webservers" defined in the inventory, 
+        # create file with the same name "group_vars/webservers" and in this file, define the variable 
+
+        # Similarly for individul hosts, create a file wiht the name of the host and put it in "host_vars"
+        # for example, "host_vars/server1"
+
+        # Variables can be overwritten from command line with -e "key=value" option to the ansible-playbook command 
+
+
+        # (base) pradga-mbp:Desktop pradga$ tree vardemo/  #Project Directory
+        # vardemo/
+        # |-- group_vars
+        # |   |-- ftpservers
+        # |   `-- webservers
+        # `-- inventory
+
+        # 1 directory, 3 files
+
+        # (base) pradga-mbp:Desktop pradga$ cat vardemo/inventory 
+        # [webservers]
+        # server1.exmaple.com
+        # server2.example.com
+
+        # [ftpservers]
+        # server3.example.com
+        # server4.example.com
+
+        # A variable named "package" is defined which could be used in the respective playbooks as {{ package }}
+        # (base) pradga-mbp:Desktop pradga$ cat vardemo/group_vars/ftpservers 
+        # package: vsftp
+        # (base) pradga-mbp:Desktop pradga$ cat vardemo/group_vars/webservers 
+        # package: http
+        # (base) pradga-mbp:Desktop pradga$ 
+
+
+
+        # Arrays : Variables that define multiple values 
+        - example array 
+          users:
+            pradeep:
+              first_name: pradeep
+              last_name: gadde
+              home_dir: /home/pradeep
+            suma:
+              first_name: suma
+              last_name: gadde
+              home_dir: /home/suma
+
+        # we may refer to these using the following syntax -  users.pradeep.first_name , users.suma.home_dir etc ..
+
+
+        - Using Facts  # discovered information about a host, can be used as conditions to run specific tasks only when necessary
+        # The "setup" module is used to gather facts
+        - ansible server1.example.com -m setup
+
+        # We can filter facts with -a 'filter=..'  Level 1 info
+        - ansible server1.example.com -m setup -a 'filter=ansible_kernel'
+        - ansible localhost -m setup -a 'filter=ansible_kernel'
+          # [WARNING]: No inventory was parsed, only implicit localhost is available
+          # localhost | SUCCESS => {
+          #     "ansible_facts": {  
+          #         "ansible_kernel": "19.4.0"
+          #     },
+          #     "changed": false
+          # }
+
+        - Custom Facts : manually created by Admins
+        # INI or JSON format wiht .fact extension stored in /etc/ansible/facts.d 
+        # will be shown as "ansible_local"
+
+
+
+
+    
+            
+
+
+
+
+
+
+
+
+...
