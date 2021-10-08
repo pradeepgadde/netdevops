@@ -1,21 +1,15 @@
 pipeline {
-    agent any
-
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building..'
+   agent none
+   stages {
+      stage('Build') {
+         agent {
+            docker {
+               image 'blang/latex:ubuntu'
             }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
-        }
-    }
+         }
+         steps {
+             sh 'xelatex sample.tex'
+         }
+      }
+   }
 }
